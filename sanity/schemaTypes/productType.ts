@@ -1,6 +1,6 @@
+import { COLORS_SANITY_LIST, MATERIALS_SANITY_LIST } from "@/lib/constants/filter";
 import { PackageIcon } from "@sanity/icons";
-import { defineField, defineType } from "sanity";
-import { MATERIALS_SANITY_LIST, COLORS_SANITY_LIST } from "@/lib/constants/filters";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
 export const productType = defineType({
   name: "product",
@@ -35,7 +35,9 @@ export const productType = defineType({
       name: "description",
       type: "text",
       group: "details",
-      rows: 4,
+      options:{
+        rows: 4,
+      },
       description: "Product description",
     }),
     defineField({
@@ -50,7 +52,7 @@ export const productType = defineType({
     }),
     defineField({
       name: "category",
-      type: "reference",
+      type: "reference" as const,
       to: [{ type: "category" }],
       group: "details",
       validation: (rule) => [rule.required().error("Category is required")],
@@ -81,15 +83,15 @@ export const productType = defineType({
     }),
     defineField({
       name: "images",
-      type: "array",
+      type: "array" as const,
       group: "media",
       of: [
-        {
-          type: "image",
-          options: {
-            hotspot: true,
-          },
-        },
+        defineArrayMember({
+            type: "image",
+            options: {
+              hotspot: true,
+            },
+          }),
       ],
       validation: (rule) => [
         rule.min(1).error("At least one image is required"),

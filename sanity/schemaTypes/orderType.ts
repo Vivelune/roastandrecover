@@ -1,6 +1,6 @@
+import { ORDER_STATUS_SANITY_LIST } from "@/lib/constants/orderStatus";
 import { BasketIcon } from "@sanity/icons";
 import { defineArrayMember, defineField, defineType } from "sanity";
-import { ORDER_STATUS_SANITY_LIST } from "@/lib/constants/orderStatus";
 
 export const orderType = defineType({
   name: "order",
@@ -22,15 +22,15 @@ export const orderType = defineType({
     }),
     defineField({
       name: "items",
-      type: "array",
+      type: "array" as const,
       group: "details",
       of: [
         defineArrayMember({
-          type: "object",
+          type: "object" as const,
           fields: [
             defineField({
               name: "product",
-              type: "reference",
+              type: "reference" as const,
               to: [{ type: "product" }],
               validation: (rule) => rule.required(),
             }),
@@ -84,7 +84,7 @@ export const orderType = defineType({
     }),
     defineField({
       name: "customer",
-      type: "reference",
+      type: "reference" as const,
       to: [{ type: "customer" }],
       group: "customer",
       description: "Reference to the customer record",
@@ -104,7 +104,7 @@ export const orderType = defineType({
     }),
     defineField({
       name: "address",
-      type: "object",
+      type: "object" as const,
       group: "customer",
       fields: [
         defineField({ name: "name", type: "string", title: "Full Name" }),
