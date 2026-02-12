@@ -8,8 +8,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     customerType,
     categoryType,
-    // orderType,
-    // productType,
+    orderType,
+    productType,
     
   ],
 }
