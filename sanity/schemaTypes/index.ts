@@ -6,10 +6,9 @@ import { productType } from './productType'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
-    customerType,
     categoryType,
-    orderType,
+    customerType,
     productType,
-    
+    orderType,
   ],
 }
