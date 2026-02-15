@@ -1,5 +1,7 @@
 import { CategoryTiles } from "@/components/featuredSections/CategoryTiles";
 import { FeaturedCarousel } from "@/components/featuredSections/FeaturedCarousel";
+import { FeaturedCarouselSkeleton } from "@/components/featuredSections/FeaturedCarouselSkeleton";
+import { ProductSection } from "@/components/featuredSections/ProductSection";
 import { ALL_CATEGORIES_QUERY } from "@/lib/sanity/queries/categories";
 import { FEATURED_PRODUCTS_QUERY, FILTER_PRODUCTS_BY_NAME_QUERY, FILTER_PRODUCTS_BY_PRICE_ASC_QUERY, FILTER_PRODUCTS_BY_PRICE_DESC_QUERY, FILTER_PRODUCTS_BY_RELEVANCE_QUERY } from "@/lib/sanity/queries/products";
 import { sanityFetch } from "@/sanity/lib/live";
@@ -72,7 +74,7 @@ export default async function Home({searchParams}:PageProps) {
   return (
     <div className="" >
       {/* Feartured Products Carousel */}
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<FeaturedCarouselSkeleton/>}>
         <FeaturedCarousel products={featuredProducts}/>
       </Suspense>
       {/* Page Banner */}
@@ -93,12 +95,20 @@ export default async function Home({searchParams}:PageProps) {
             activeCategory={categorySlug || undefined}
           />
         </div>
+        
       </div>
 
 
-      {/* Category Grid */}
-
       {/* Products Section  */}
+
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <ProductSection
+          categories={categories}
+          products={products}
+          searchQuery={searchQuery}
+        />
+      </div>
+
     </div>
   );
 }
