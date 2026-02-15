@@ -2,13 +2,13 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
-import { Carousel, CarouselApi, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel"
+import { Carousel, CarouselApi, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel"
 import Image from "next/image"
 import { cn, formatPrice } from "@/lib/utils"
 import Link from "next/link"
 import { ArrowRightIcon } from "lucide-react"
-import { Badge } from "./ui/badge"
-import { Button } from "./ui/button"
+import { Badge } from "../ui/badge"
+import { Button } from "../ui/button"
 import { FEATURED_PRODUCTS_QUERYResult } from "@/sanity.types"
 import Autoplay from "embla-carousel-autoplay"
 
