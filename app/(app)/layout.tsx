@@ -1,3 +1,4 @@
+import { CartSheet } from '@/components/featuredSections/CartSheet'
 import { Header } from '@/components/featuredSections/Header'
 import { Toaster } from '@/components/ui/sonner'
 import { CartStoreProvider } from '@/lib/store/cart-store-provider'
@@ -13,6 +14,7 @@ function Layout({ children }: { children: React.ReactNode }) {
         <ChatStoreProvider>
         <Header/>
     <main>{children}</main>
+    <CartSheet/>
     <Toaster position="top-center"/>
     <SanityLive/>
     </ChatStoreProvider>
