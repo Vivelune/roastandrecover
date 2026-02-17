@@ -35,9 +35,6 @@ export const productType = defineType({
       name: "description",
       type: "text",
       group: "details",
-      options:{
-        rows: 4,
-      },
       description: "Product description",
     }),
     defineField({

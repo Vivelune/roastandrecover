@@ -9,7 +9,7 @@ export const categoryType = defineType({
     fields:[
         defineField({
             name:"title",
-            type:"string",
+            type:"text",
             validation:(rule)=>[
                 rule.required().error("Category title is required"),
             ],
