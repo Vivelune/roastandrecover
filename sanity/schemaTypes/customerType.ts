@@ -13,26 +13,26 @@ groups:[
 fields:[
     defineField({
         name:"email",
-        type:"string",
+        type:"text",
         group:"details",
         validation:(rule) => [rule.required().error("Email is required")],
     },
 ),
 defineField({
     name:"name",
-    type:"string",
+    type:"text",
     group:"details",
     description:"Customer's Full Name",
 }),
 defineField({
     name:"clerkUserId",
-    type:"string",
+    type:"text",
     group:"details",
     description:"Clerk User ID for authentication",
 }),
 defineField({
     name:"stripeCustomerId",
-    type:"string",
+    type:"text",
     group:"stripe",
     readOnly:true,
     description:"Stripe customer ID for payments",

@@ -5,6 +5,7 @@ import { CartStoreProvider } from '@/lib/store/cart-store-provider'
 import { ChatStoreProvider } from '@/lib/store/chat-store-provider'
 import { SanityLive } from '@/sanity/lib/live'
 import { ClerkProvider } from '@clerk/nextjs'
+import { ChatSheet } from "@/components/app/ChatSheet";
 import React from 'react'
 
 function Layout({ children }: { children: React.ReactNode }) {
@@ -15,6 +16,7 @@ function Layout({ children }: { children: React.ReactNode }) {
         <Header/>
     <main>{children}</main>
     <CartSheet/>
+    <ChatSheet/>
     <Toaster position="top-center"/>
     <SanityLive/>
     </ChatStoreProvider>
