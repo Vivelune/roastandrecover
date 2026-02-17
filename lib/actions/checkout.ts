@@ -14,6 +14,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2026-01-28.clover",
 });
 
+// Types
 interface CartItem {
   productId: string;
   name: string;
@@ -28,51 +29,34 @@ interface CheckoutResult {
   error?: string;
 }
 
-function normalizeError(error: unknown): string {
-  if (error instanceof Stripe.errors.StripeError) {
-    return error.message;
-  }
-  if (error instanceof Error) {
-    return error.message;
-  }
-  return "Unexpected server error";
-}
-
-function resolveBaseUrl(): string {
-  if (process.env.NEXT_PUBLIC_BASE_URL) {
-    return process.env.NEXT_PUBLIC_BASE_URL;
-  }
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`;
-  }
-  return "http://localhost:3000";
-}
-
+/**
+ * Creates a Stripe Checkout Session from cart items
+ * Validates stock and prices against Sanity before creating session
+ */
 export async function createCheckoutSession(
   items: CartItem[]
 ): Promise<CheckoutResult> {
   try {
+    // 1. Verify user is authenticated
     const { userId } = await auth();
     const user = await currentUser();
 
     if (!userId || !user) {
-      return { success: false, error: "Authentication required" };
+      return { success: false, error: "Please sign in to checkout" };
     }
 
-    if (!Array.isArray(items) || items.length === 0) {
-      return { success: false, error: "Cart is empty" };
+    // 2. Validate cart is not empty
+    if (!items || items.length === 0) {
+      return { success: false, error: "Your cart is empty" };
     }
 
-    const productIds = [...new Set(items.map((i) => i.productId))];
-
+    // 3. Fetch current product data from Sanity to validate prices/stock
+    const productIds = items.map((item) => item.productId);
     const products = await client.fetch(PRODUCTS_BY_IDS_QUERY, {
       ids: productIds,
     });
 
-    if (!Array.isArray(products) || products.length === 0) {
-      return { success: false, error: "Products unavailable" };
-    }
-
+    // 4. Validate each item
     const validationErrors: string[] = [];
     const validatedItems: {
       product: (typeof products)[number];
@@ -80,81 +64,61 @@ export async function createCheckoutSession(
     }[] = [];
 
     for (const item of items) {
-      if (!item.productId || item.quantity <= 0) {
-        validationErrors.push("Invalid cart item detected");
-        continue;
-      }
-
       const product = products.find(
         (p: { _id: string }) => p._id === item.productId
       );
 
       if (!product) {
-        validationErrors.push(`"${item.name}" is no longer available`);
+        validationErrors.push(`Product "${item.name}" is no longer available`);
         continue;
       }
 
-      const stock = product.stock ?? 0;
-
-      if (stock <= 0) {
+      if ((product.stock ?? 0) === 0) {
         validationErrors.push(`"${product.name}" is out of stock`);
         continue;
       }
 
-      if (item.quantity > stock) {
+      if (item.quantity > (product.stock ?? 0)) {
         validationErrors.push(
-          `Only ${stock} unit(s) of "${product.name}" available`
+          `Only ${product.stock} of "${product.name}" available`
         );
         continue;
       }
 
-      if ((product.price ?? 0) <= 0) {
-        validationErrors.push(`Invalid price for "${product.name}"`);
-        continue;
-      }
-
-      validatedItems.push({
-        product,
-        quantity: Math.floor(item.quantity),
-      });
+      validatedItems.push({ product, quantity: item.quantity });
     }
 
     if (validationErrors.length > 0) {
       return { success: false, error: validationErrors.join(". ") };
     }
 
+    // 5. Create Stripe line items with validated prices
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] =
       validatedItems.map(({ product, quantity }) => ({
         price_data: {
           currency: "usd",
-          unit_amount: Math.round((product.price ?? 0) * 100),
           product_data: {
-            name: product.name || "Product",
-            images: product.image?.asset?.url
-              ? [product.image.asset.url]
-              : undefined,
+            name: product.name ?? "Product",
+            images: product.image?.asset?.url ? [product.image.asset.url] : [],
             metadata: {
               productId: product._id,
             },
           },
+          unit_amount: Math.round((product.price ?? 0) * 100), // Convert to pence
         },
         quantity,
       }));
 
-    const userEmail =
-      user.emailAddresses?.[0]?.emailAddress?.trim() || undefined;
-
-    if (!userEmail) {
-      return { success: false, error: "User email not available" };
-    }
-
+    // 6. Get or create Stripe customer
+    const userEmail = user.emailAddresses[0]?.emailAddress ?? "";
     const userName =
       `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || userEmail;
 
     const { stripeCustomerId, sanityCustomerId } =
       await getOrCreateStripeCustomer(userEmail, userName, userId);
 
-    const metadata: Stripe.MetadataParam = {
+    // 7. Prepare metadata for webhook
+    const metadata = {
       clerkUserId: userId,
       userEmail,
       sanityCustomerId,
@@ -162,71 +126,104 @@ export async function createCheckoutSession(
       quantities: validatedItems.map((i) => i.quantity).join(","),
     };
 
+    // 8. Create Stripe Checkout Session
+    // Priority: NEXT_PUBLIC_BASE_URL > Vercel URL > localhost
+    const baseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
+      "http://localhost:3000";
+
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      payment_method_types: ["card"],
-      customer: stripeCustomerId,
+      payment_method_types: ["card", "alipay" , "cashapp" , "klarna"],
       line_items: lineItems,
-      metadata,
+      customer: stripeCustomerId,
       shipping_address_collection: {
         allowed_countries: [
-          "US",
-          "CA",
-          "GB",
-          "AU",
-          "NZ",
-          "DE",
-          "FR",
-          "IT",
-          "ES",
-          "NL",
-          "BE",
-          "CH",
-          "SE",
-          "NO",
-          "DK",
-          "FI",
-          "IE",
-          "JP",
-          "SG",
-          "HK",
-          "KR",
-          "AE",
-          "SA",
-          "IL",
-          "IN",
-          "ZA",
-          "BR",
-          "MX",
+          "GB", // United Kingdom
+          "US", // United States
+          "CA", // Canada
+          "AU", // Australia
+          "NZ", // New Zealand
+          "IE", // Ireland
+          "DE", // Germany
+          "FR", // France
+          "ES", // Spain
+          "IT", // Italy
+          "NL", // Netherlands
+          "BE", // Belgium
+          "AT", // Austria
+          "CH", // Switzerland
+          "SE", // Sweden
+          "NO", // Norway
+          "DK", // Denmark
+          "FI", // Finland
+          "PT", // Portugal
+          "PL", // Poland
+          "CZ", // Czech Republic
+          "GR", // Greece
+          "HU", // Hungary
+          "RO", // Romania
+          "BG", // Bulgaria
+          "HR", // Croatia
+          "SI", // Slovenia
+          "SK", // Slovakia
+          "LT", // Lithuania
+          "LV", // Latvia
+          "EE", // Estonia
+          "LU", // Luxembourg
+          "MT", // Malta
+          "CY", // Cyprus
+          "JP", // Japan
+          "SG", // Singapore
+          "HK", // Hong Kong
+          "KR", // South Korea
+          "TW", // Taiwan
+          "MY", // Malaysia
+          "TH", // Thailand
+          "IN", // India
+          "AE", // United Arab Emirates
+          "SA", // Saudi Arabia
+          "IL", // Israel
+          "ZA", // South Africa
+          "BR", // Brazil
+          "MX", // Mexico
+          "AR", // Argentina
+          "CL", // Chile
+          "CO", // Colombia
         ],
       },
-      success_url: `${resolveBaseUrl()}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${resolveBaseUrl()}/checkout`,
+      metadata,
+      success_url: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/checkout`,
     });
 
-    if (!session.url) {
-      return { success: false, error: "Checkout session creation failed" };
-    }
-
-    return { success: true, url: session.url };
+    return { success: true, url: session.url ?? undefined };
   } catch (error) {
-    console.error("Stripe Checkout Error:", error);
-    return { success: false, error: normalizeError(error) };
+    console.error("Checkout error:", error);
+    return {
+      success: false,
+      error: "Something went wrong. Please try again.",
+    };
   }
 }
 
+/**
+ * Retrieves a checkout session by ID (for success page)
+ */
 export async function getCheckoutSession(sessionId: string) {
   try {
     const { userId } = await auth();
 
-    if (!userId || !sessionId) {
-      return { success: false, error: "Unauthorized request" };
+    if (!userId) {
+      return { success: false, error: "Not authenticated" };
     }
 
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
       expand: ["line_items", "customer_details"],
     });
 
+    // Verify the session belongs to this user
     if (session.metadata?.clerkUserId !== userId) {
       return { success: false, error: "Session not found" };
     }
@@ -240,16 +237,15 @@ export async function getCheckoutSession(sessionId: string) {
         amountTotal: session.amount_total,
         paymentStatus: session.payment_status,
         shippingAddress: session.customer_details?.address,
-        lineItems:
-          session.line_items?.data.map((item) => ({
-            name: item.description,
-            quantity: item.quantity,
-            amount: item.amount_total,
-          })) ?? [],
+        lineItems: session.line_items?.data.map((item) => ({
+          name: item.description,
+          quantity: item.quantity,
+          amount: item.amount_total,
+        })),
       },
     };
   } catch (error) {
-    console.error("Retrieve Checkout Session Error:", error);
-    return { success: false, error: normalizeError(error) };
+    console.error("Get session error:", error);
+    return { success: false, error: "Could not retrieve order details" };
   }
 }
