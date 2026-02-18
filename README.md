@@ -1,8 +1,8 @@
-# 🔥 **Roast & Recover**
+# **Roast & Recover**
 ### *Where Code Meets Calm*
 
 <div align="center">
-  <img src="public/Roastandrecovercard.png" alt="Roast & Recover Banner" width="800"/>
+  <img src="/Roastandrecovercard.png" alt="Roast & Recover Banner" width="800"/>
   
   <br>
   <br>
@@ -33,7 +33,7 @@
   <h3>Premium e-commerce for coffee, tea & mindful living rituals</h3>
   
   <p>
-    <a href="https://www.roastrecover.com"><strong>🌐 Live Demo</strong></a> •
+    <a href="https://www.roastrecover.com"><strong>🌐 Live Store</strong></a> •
     <a href="#"><strong>📖 Documentation</strong></a> •
     <a href="#"><strong>🐛 Report Bug</strong></a> •
     <a href="#"><strong>✨ Request Feature</strong></a>
@@ -41,8 +41,8 @@
   
   <br>
   
-  <img src="https://img.shields.io/github/stars/yourusername/roastandrecover?style=social" alt="Stars" />
-  <img src="https://img.shields.io/github/forks/yourusername/roastandrecover?style=social" alt="Forks" />
+  <img src="https://img.shields.io/github/stars/Vivelune/roastandrecover?style=social" alt="Stars" />
+  <img src="https://img.shields.io/github/forks/Vivelune/roastandrecover?style=social" alt="Forks" />
   
 </div>
 
@@ -301,7 +301,7 @@
     <tr>
       <td>
         <pre># Clone the repository
-git clone https://github.com/yourusername/roastandrecover.git
+git clone https://github.com/Vivelune/roastandrecover.git
 cd roastandrecover
 
 # Install dependencies
@@ -572,7 +572,7 @@ sanity dev
 ### **One-Click Deploy to Vercel**
 
 <div align="center">
-  <a href="https://vercel.com/new/clone?repository-url=https://github.com/yourusername/roastandrecover">
+  <a href="https://vercel.com/new/clone?repository-url=https://github.com/Vivelune/roastandrecover">
     <img src="https://vercel.com/button" alt="Deploy with Vercel" />
   </a>
 </div>
@@ -822,16 +822,16 @@ console.log('debugging'); // Remove before PR!</pre>
 ## 📬 **Connect With Us**
 
 <div align="center">
-  <a href="https://www.roastrecover.com">
+  <a href="https://www.roastandrecover.com">
     <img src="https://img.shields.io/badge/Website-roastrecover.com-000000?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Website" />
   </a>
-  <a href="https://twitter.com/roastrecover">
+  <a href="https://twitter.com/roastandrecover">
     <img src="https://img.shields.io/badge/Twitter-@roastrecover-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white" alt="Twitter" />
   </a>
-  <a href="https://instagram.com/roast.and.recover">
+  <a href="https://instagram.com/roastandrecover">
     <img src="https://img.shields.io/badge/Instagram-@roast.and.recover-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram" />
   </a>
-  <a href="mailto:ritual@roastrecover.com">
+  <a href="mailto:brew@roastandrecover.com">
     <img src="https://img.shields.io/badge/Email-ritual@roastrecover.com-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
   </a>
 </div>
@@ -850,9 +850,9 @@ console.log('debugging'); // Remove before PR!</pre>
   
   <br>
   
-  <img src="https://img.shields.io/github/stars/yourusername/roastandrecover?style=social" alt="Stars" />
-  <img src="https://img.shields.io/github/forks/yourusername/roastandrecover?style=social" alt="Forks" />
-  <img src="https://img.shields.io/github/watchers/yourusername/roastandrecover?style=social" alt="Watchers" />
+  <img src="https://img.shields.io/github/stars/Vivelune/roastandrecover?style=social" alt="Stars" />
+  <img src="https://img.shields.io/github/forks/Vivelune/roastandrecover?style=social" alt="Forks" />
+  <img src="https://img.shields.io/github/watchers/Vivelune/roastandrecover?style=social" alt="Watchers" />
 </div>
 
 <br>
