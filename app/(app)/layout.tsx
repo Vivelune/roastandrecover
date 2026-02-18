@@ -1,28 +1,30 @@
-import { CartSheet } from '@/components/featuredSections/CartSheet'
-import { Header } from '@/components/featuredSections/Header'
-import { Toaster } from '@/components/ui/sonner'
-import { CartStoreProvider } from '@/lib/store/cart-store-provider'
-import { ChatStoreProvider } from '@/lib/store/chat-store-provider'
-import { SanityLive } from '@/sanity/lib/live'
-import { ClerkProvider } from '@clerk/nextjs'
+import { CartStoreProvider } from "@/lib/store/cart-store-provider";
+import { ChatStoreProvider } from "@/lib/store/chat-store-provider";
+import { ClerkProvider } from "@clerk/nextjs";
+import { SanityLive } from "@/sanity/lib/live";
+import { Toaster } from "@/components/ui/sonner";
+import { Header } from "@/components/featuredSections/Header";
+import { CartSheet } from "@/components/featuredSections/CartSheet";
 import { ChatSheet } from "@/components/app/ChatSheet";
-import React from 'react'
+import { AppShell } from "@/components/app/AppShell";
 
-function Layout({ children }: { children: React.ReactNode }) {
+function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <ClerkProvider>
       <CartStoreProvider>
         <ChatStoreProvider>
-        <Header/>
-    <main>{children}</main>
-    <CartSheet/>
-    <ChatSheet/>
-    <Toaster position="top-center"/>
-    <SanityLive/>
-    </ChatStoreProvider>
-    </CartStoreProvider>
+          <AppShell>
+            <Header />
+            <main>{children}</main>
+          </AppShell>
+          <CartSheet />
+          <ChatSheet />
+          <Toaster position="bottom-center" />
+          <SanityLive />
+        </ChatStoreProvider>
+      </CartStoreProvider>
     </ClerkProvider>
-  )
+  );
 }
 
-export default Layout
+export default AppLayout;

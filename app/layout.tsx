@@ -13,45 +13,46 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.roastrecover.com'; // Use your actual domain
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"),
+  metadataBase: new URL(baseUrl),
   title: {
-    default: "Roast&Recover - Artisan Coffee & Tea",
-    template: "%s | Roast&Recover"
+    // The default template for all pages
+    template: '%s | Roast & Recover',
+    default: 'Roast & Recover - Modern Rituals for Coffee, Tea & Mindful Living',
   },
-  description: "Discover premium coffee beans, loose leaf teas, and artisanal brewing equipment. From pour-over to espresso, craft your perfect cup with Roast&Recover.",
-  keywords: ["coffee", "tea", "specialty coffee", "loose leaf tea", "brewing equipment", "pour over", "espresso", "french press"],
-  authors: [{ name: "Roast&Recover" }],
-  creator: "Roast&Recover",
-  publisher: "Roast&Recover",
+  description: 'Discover premium accessories for coffee, tea, and contemplative living. Transform your daily routine into a ritual with our curated collections of minimalist designs.',
+  keywords: ['coffee accessories', 'tea ceremony set', 'mindful living', 'premium gifts', 'minimalist decor', 'travel tea set', 'titanium flask', 'moka pot gift'],
+  authors: [{ name: 'Roast & Recover' }],
+  creator: 'Roast & Recover',
+  publisher: 'Roast & Recover',
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
   openGraph: {
-    title: "Roast&Recover - Artisan Coffee & Tea",
-    description: "Discover premium coffee beans, loose leaf teas, and artisanal brewing equipment.",
-    url: "/",
-    siteName: "Roast&Recover",
+    title: 'Roast & Recover',
+    description: 'Modern rituals for coffee, tea & mindful living.',
+    url: baseUrl,
+    siteName: 'Roast & Recover',
     images: [
       {
-        url: "/og-image.jpg",
+        url: '/Roastandrecovercard.png', // Create a killer 1200x630 social card
         width: 1200,
         height: 630,
-        alt: "Roast&Recover - Artisan Coffee & Tea",
+        alt: 'Roast & Recover - Elevate Your Everyday',
       },
     ],
-    locale: "en_US",
-    type: "website",
+    locale: 'en_US',
+    type: 'website',
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Roast&Recover - Artisan Coffee & Tea",
-    description: "Discover premium coffee beans, loose leaf teas, and artisanal brewing equipment.",
-    images: ["/og-image.jpg"],
-    creator: "@roastrecover",
+    card: 'summary_large_image',
+    title: 'Roast & Recover',
+    description: 'Modern rituals for coffee, tea & mindful living.',
+    images: ['/ROAST&RECOVERBrandLogo.png'],
+    creator: '@roastandrecover', // Add if you have one
   },
   robots: {
     index: true,
@@ -59,19 +60,23 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
     },
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
+    icon: [
+      { url: '/RRFavicon.png' },
+      { url: '/RRFavicon.png', sizes: '16x16', type: 'image/png' },
+      { url: '/RRFavicon.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/RRFavicon.png' }, // Create an Apple touch icon
+    ],
   },
-  manifest: "/site.webmanifest",
+  manifest: '/site.webmanifest', // We'll create this
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{

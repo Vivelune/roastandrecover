@@ -1,0 +1,22 @@
+{
+    "name": "Roast & Recover",
+    "short_name": "R&R",
+    "description": "Modern rituals for coffee, tea & mindful living",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#E7E1D8",
+    "theme_color": "#1C1C1C",
+    "icons": [
+      {
+        "src": "/RRFavicon.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/RRFavicon.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  
