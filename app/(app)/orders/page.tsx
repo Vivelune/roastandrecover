@@ -9,9 +9,14 @@ import { getOrderStatus } from "@/lib/constants/orderStatus";
 import { formatPrice, formatDate, formatOrderNumber } from "@/lib/utils";
 import { StackedProductImages } from "@/components/app/StackedProductImages";
 
+
 export const metadata = {
-  title: "Your Orders | Furniture Shop",
-  description: "View your order history",
+  title: 'My Rituals | Order History',
+  description: 'Track your Roast&Recover orders and revisit your ritual collection.',
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 export default async function OrdersPage() {

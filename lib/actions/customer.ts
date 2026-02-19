@@ -26,12 +26,22 @@ export async function getOrCreateStripeCustomer(
     email,
   });
 
+  // If we have a Sanity record with a Stripe ID, verify it still exists in Stripe
   if (existingCustomer?.stripeCustomerId) {
-    // Customer exists, return existing IDs
-    return {
-      stripeCustomerId: existingCustomer.stripeCustomerId,
-      sanityCustomerId: existingCustomer._id,
-    };
+    try {
+      // Verify the customer still exists in Stripe
+      await stripe.customers.retrieve(existingCustomer.stripeCustomerId);
+      
+      // Customer exists in both - return existing IDs
+      return {
+        stripeCustomerId: existingCustomer.stripeCustomerId,
+        sanityCustomerId: existingCustomer._id,
+      };
+    } catch (error) {
+      // Stripe customer doesn't exist anymore - we'll create a new one
+      console.log("Stripe customer not found, creating new one:", error);
+      // Continue to create a new Stripe customer below
+    }
   }
 
   // Check if customer exists in Stripe by email
@@ -59,10 +69,15 @@ export async function getOrCreateStripeCustomer(
 
   // Create or update customer in Sanity
   if (existingCustomer) {
-    // Update existing Sanity customer with Stripe ID
+    // Update existing Sanity customer with new Stripe ID
     await writeClient
       .patch(existingCustomer._id)
-      .set({ stripeCustomerId, clerkUserId, name })
+      .set({ 
+        stripeCustomerId, 
+        clerkUserId, 
+        name,
+        updatedAt: new Date().toISOString() 
+      })
       .commit();
     return {
       stripeCustomerId,
@@ -78,6 +93,7 @@ export async function getOrCreateStripeCustomer(
     clerkUserId,
     stripeCustomerId,
     createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   return {
