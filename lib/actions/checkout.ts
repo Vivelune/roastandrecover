@@ -96,7 +96,7 @@ export async function createCheckoutSession(
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] =
       validatedItems.map(({ product, quantity }) => ({
         price_data: {
-          currency: "usd",
+          currency: "gbp",
           product_data: {
             name: product.name ?? "Product",
             images: product.image?.asset?.url ? [product.image.asset.url] : [],
@@ -135,7 +135,7 @@ export async function createCheckoutSession(
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      payment_method_types: ["card" , "cashapp" , "klarna"],
+      payment_method_types: ["card"],
       line_items: lineItems,
       customer: stripeCustomerId,
       shipping_address_collection: {
