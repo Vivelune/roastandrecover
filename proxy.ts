@@ -7,7 +7,9 @@ const isProtectedRoutes = createRouteMatcher (
         "/checkout",
         "/orders",
         "/orders/[id]",
-        "/checkout/success"
+        "/checkout/success",
+        "/admin",        // Add admin routes to protected routes
+        "/admin/:path*", // Protect all admin sub-routes
     ]
 )
 

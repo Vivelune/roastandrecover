@@ -24,7 +24,16 @@ export function Header() {
         </Link>
 
         {/* Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 mr-10">
+        <div className="hidden md:flex items-center gap-4 text-sm text-zinc-500 dark:text-zinc-400">
+  <Link href="/privacy" className="hover:text-zinc-700 dark:hover:text-zinc-200">
+    Privacy
+  </Link>
+  <span className="text-zinc-300 dark:text-zinc-600">|</span>
+  <Link href="/terms" className="hover:text-zinc-700 dark:hover:text-zinc-200">
+    Terms
+  </Link>
+</div>
           {/* My Orders - Only when signed in */}
           <SignedIn>
             <Button asChild>
