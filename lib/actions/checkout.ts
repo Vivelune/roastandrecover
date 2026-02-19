@@ -135,7 +135,7 @@ export async function createCheckoutSession(
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      payment_method_types: ["card", "alipay" , "cashapp" , "klarna"],
+      payment_method_types: ["card" , "cashapp" , "klarna"],
       line_items: lineItems,
       customer: stripeCustomerId,
       shipping_address_collection: {
