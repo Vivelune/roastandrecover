@@ -3,10 +3,13 @@ import { SuccessClient } from "./SuccessClient";
 import { getCheckoutSession } from "@/lib/actions/checkout";
 
 export const metadata = {
-  title: "Order Confirmed | Furniture Shop",
-  description: "Your order has been placed successfully",
+  title: 'Order Confirmed | Your Ritual Awaits',
+  description: 'Thank you for choosing Roast&Recover. Your order confirmation and ritual preparation guide.',
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
-
 interface SuccessPageProps {
   searchParams: Promise<{ session_id?: string }>;
 }
@@ -25,5 +28,10 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
     redirect("/");
   }
 
-  return <SuccessClient session={result.session} />;
+  return (
+  <SuccessClient session={result.session}
+   />
+  
+  )  
+  
 }

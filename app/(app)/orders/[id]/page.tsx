@@ -10,8 +10,12 @@ import { getOrderStatus } from "@/lib/constants/orderStatus";
 import { formatPrice, formatDate } from "@/lib/utils";
 
 export const metadata = {
-  title: "Order Details | Furniture Shop",
-  description: "View your order details",
+  title: 'Order Details | Your Ritual Journey',
+  description: 'Track your Roast&Recover order status and preparation timeline.',
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 interface OrderPageProps {

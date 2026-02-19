@@ -21,6 +21,18 @@ interface PageProps{
 
   }>;
 }
+export const metadata = {
+  title: 'Modern Ritual Lifestyle | Coffee & Tea Ceremony Accessories',
+  description: 'Discover handcrafted tools for mindful living. Premium pour-over coffee sets, Japanese-inspired tea ceremonies, and contemplative home accessories.',
+  openGraph: {
+    title: 'Roast&Recover | Modern Ritual Lifestyle',
+    description: 'Transform your daily coffee into ceremony. Premium brewing tools and contemplative living accessories.',
+    images: ['/images/home-og.jpg'],
+  },
+  alternates: {
+    canonical: '/',
+  },
+};
 
 
 
@@ -108,6 +120,46 @@ export default async function Home({searchParams}:PageProps) {
           searchQuery={searchQuery}
         />
       </div>
+      <script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Store",
+      "name": "Roast&Recover",
+      "description": "Modern Ritual Lifestyle - Premium tea, coffee, and contemplative living accessories",
+      "url": "https://roastandrecover.com",
+      "logo": "https://roastandrecover.com/logo-dark.svg",
+      "sameAs": [
+        "https://instagram.com/roastandrecover",
+        "https://pinterest.com/roastandrecover",
+        "https://tiktok.com/@roastandrecover"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "US"
+      },
+      "makesOffer": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Product",
+            "name": "Coffee Rituals",
+            "description": "Premium pour-over and espresso tools"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Product",
+            "name": "Tea Ceremony",
+            "description": "Japanese-inspired tea sets and accessories"
+          }
+        }
+      ]
+    })
+  }}
+/>
 
     </div>
   );
