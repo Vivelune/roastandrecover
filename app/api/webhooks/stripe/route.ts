@@ -17,7 +17,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 });
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
+console.log(process.env.STRIPE_WEBHOOK_SECRET, "WEBHOOK SECRET KEY")
 export async function POST(req: Request) {
   const body = await req.text();
   const headersList = await headers();
@@ -31,7 +31,6 @@ export async function POST(req: Request) {
   }
 
   let event: Stripe.Event;
-
   try {
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err) {
@@ -158,4 +157,5 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     console.error("Error handling checkout.session.completed:", error);
     throw error; // Re-throw to return 500 and trigger Stripe retry
   }
+  
 }

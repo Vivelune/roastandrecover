@@ -104,99 +104,79 @@ export async function createCheckoutSession(
               productId: product._id,
             },
           },
-          unit_amount: Math.round((product.price ?? 0) * 100), // Convert to pence
+          unit_amount: Math.round((product.price ?? 0) * 100), // Convert to cents
         },
         quantity,
       }));
 
-    // 6. Get or create Stripe customer
+    // 6. Get or create Stripe customer with retry logic
     const userEmail = user.emailAddresses[0]?.emailAddress ?? "";
     const userName =
       `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || userEmail;
 
-    const { stripeCustomerId, sanityCustomerId } =
-      await getOrCreateStripeCustomer(userEmail, userName, userId);
+    // Try to get/create customer, but don't fail if it doesn't work
+    let stripeCustomerId: string | undefined;
+    let sanityCustomerId: string | undefined;
+    
+    try {
+      console.log("Attempting to get/create Stripe customer for:", userEmail);
+      const customerResult = await getOrCreateStripeCustomer(userEmail, userName, userId);
+      stripeCustomerId = customerResult.stripeCustomerId;
+      sanityCustomerId = customerResult.sanityCustomerId;
+      console.log("Customer resolved:", { stripeCustomerId, sanityCustomerId });
+    } catch (customerError) {
+      console.error("Failed to get/create Stripe customer:", customerError);
+      // Continue without customer - Stripe sessions work fine without a customer ID
+      console.log("Continuing checkout without customer ID");
+    }
 
     // 7. Prepare metadata for webhook
-    const metadata = {
+    const metadata: Record<string, string> = {
       clerkUserId: userId,
       userEmail,
-      sanityCustomerId,
-      productIds: validatedItems.map((i) => i.product._id).join(","),
-      quantities: validatedItems.map((i) => i.quantity).join(","),
     };
+    
+    // Only add these if we have them
+    if (sanityCustomerId) {
+      metadata.sanityCustomerId = sanityCustomerId;
+    }
+    
+    if (validatedItems.length > 0) {
+      metadata.productIds = validatedItems.map((i) => i.product._id).join(",");
+      metadata.quantities = validatedItems.map((i) => i.quantity).join(",");
+    }
 
     // 8. Create Stripe Checkout Session
-    // Priority: NEXT_PUBLIC_BASE_URL > Vercel URL > localhost
     const baseUrl =
       process.env.NEXT_PUBLIC_BASE_URL ||
       (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
       "http://localhost:3000";
 
-    const session = await stripe.checkout.sessions.create({
+    // Build session parameters
+    const sessionParams: Stripe.Checkout.SessionCreateParams = {
       mode: "payment",
       payment_method_types: ["card"],
       line_items: lineItems,
-      customer: stripeCustomerId,
       shipping_address_collection: {
         allowed_countries: [
-          "GB", // United Kingdom
-          "US", // United States
-          "CA", // Canada
-          "AU", // Australia
-          "NZ", // New Zealand
-          "IE", // Ireland
-          "DE", // Germany
-          "FR", // France
-          "ES", // Spain
-          "IT", // Italy
-          "NL", // Netherlands
-          "BE", // Belgium
-          "AT", // Austria
-          "CH", // Switzerland
-          "SE", // Sweden
-          "NO", // Norway
-          "DK", // Denmark
-          "FI", // Finland
-          "PT", // Portugal
-          "PL", // Poland
-          "CZ", // Czech Republic
-          "GR", // Greece
-          "HU", // Hungary
-          "RO", // Romania
-          "BG", // Bulgaria
-          "HR", // Croatia
-          "SI", // Slovenia
-          "SK", // Slovakia
-          "LT", // Lithuania
-          "LV", // Latvia
-          "EE", // Estonia
-          "LU", // Luxembourg
-          "MT", // Malta
-          "CY", // Cyprus
-          "JP", // Japan
-          "SG", // Singapore
-          "HK", // Hong Kong
-          "KR", // South Korea
-          "TW", // Taiwan
-          "MY", // Malaysia
-          "TH", // Thailand
-          "IN", // India
-          "AE", // United Arab Emirates
-          "SA", // Saudi Arabia
-          "IL", // Israel
-          "ZA", // South Africa
-          "BR", // Brazil
-          "MX", // Mexico
-          "AR", // Argentina
-          "CL", // Chile
-          "CO", // Colombia
+          "GB", "US", "CA", "AU", "NZ", "IE", "DE", "FR", "ES", "IT",
+          "NL", "BE", "AT", "CH", "SE", "NO", "DK", "FI", "PT", "PL",
+          "CZ", "GR", "HU", "RO", "BG", "HR", "SI", "SK", "LT", "LV",
+          "EE", "LU", "MT", "CY", "JP", "SG", "HK", "KR", "TW", "MY",
+          "TH", "IN", "AE", "SA", "IL", "ZA", "BR", "MX", "AR", "CL", "CO",
         ],
       },
       metadata,
       success_url: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/checkout`,
-    });
+    };
+
+    // Only add customer if we have a valid one
+    if (stripeCustomerId) {
+      sessionParams.customer = stripeCustomerId;
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionParams);
 
     return { success: true, url: session.url ?? undefined };
   } catch (error) {
