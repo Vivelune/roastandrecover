@@ -20,6 +20,7 @@
     "@sanity/image-url": "^1.2.0",
     "@sanity/sdk-react": "^2.7.0",
     "@sanity/vision": "^4.22.0",
+    "@sanity/webhook": "^4.0.4",
     "ai": "^6.0.86",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

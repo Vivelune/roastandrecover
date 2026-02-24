@@ -6,6 +6,10 @@ import { ALL_CATEGORIES_QUERY } from "@/lib/sanity/queries/categories";
 import { FEATURED_PRODUCTS_QUERY, FILTER_PRODUCTS_BY_NAME_QUERY, FILTER_PRODUCTS_BY_PRICE_ASC_QUERY, FILTER_PRODUCTS_BY_PRICE_DESC_QUERY, FILTER_PRODUCTS_BY_RELEVANCE_QUERY } from "@/lib/sanity/queries/products";
 import { sanityFetch } from "@/sanity/lib/live";
 import { Suspense } from "react";
+import { revalidatePath } from 'next/cache';
+
+
+export const revalidate = 60; // Revalidate every 60 seconds (ISR)
 
 
 interface PageProps{
