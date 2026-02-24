@@ -4,6 +4,9 @@ import Stripe from "stripe";
 import { client, writeClient } from "@/sanity/lib/client";
 import { ORDER_BY_STRIPE_PAYMENT_ID_QUERY } from "@/lib/sanity/queries/orders";
 
+
+
+
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error("STRIPE_SECRET_KEY is not defined");
 }
@@ -32,6 +35,7 @@ export async function POST(req: Request) {
 
   let event: Stripe.Event;
   try {
+    
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
@@ -57,18 +61,24 @@ export async function POST(req: Request) {
 }
 
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
-  const stripePaymentId = session.payment_intent as string;
-
+  // Use session.id instead of payment_intent for idempotency
+  const stripeSessionId = session.id;
+  console.log("Handling checkout completed for session:", stripeSessionId);
+// In your webhook, add this check at the beginning
+console.log("Session details:", {
+  id: session.id,
+  payment_intent: session.payment_intent,
+  payment_status: session.payment_status,
+  metadata: session.metadata,
+});
   try {
-    // Idempotency check: prevent duplicate processing on webhook retries
+    // Idempotency check using session ID
     const existingOrder = await client.fetch(ORDER_BY_STRIPE_PAYMENT_ID_QUERY, {
-      stripePaymentId,
+      stripePaymentId: stripeSessionId, // Store session ID instead
     });
 
     if (existingOrder) {
-      console.log(
-        `Webhook already processed for payment ${stripePaymentId}, skipping`
-      );
+      console.log(`Webhook already processed for session ${stripeSessionId}, skipping`);
       return;
     }
 
@@ -81,16 +91,28 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
       quantities: quantitiesString,
     } = session.metadata ?? {};
 
+    console.log("Extracted metadata:", {
+      clerkUserId,
+      userEmail,
+      sanityCustomerId,
+      productIdsString,
+      quantitiesString,
+    });
+
     if (!clerkUserId || !productIdsString || !quantitiesString) {
-      console.error("Missing metadata in checkout session");
+      console.error("Missing required metadata in checkout session");
       return;
     }
 
     const productIds = productIdsString.split(",");
     const quantities = quantitiesString.split(",").map(Number);
 
+    console.log("Product IDs:", productIds);
+    console.log("Quantities:", quantities);
+
     // Get line items from Stripe
     const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
+    console.log("Line items fetched:", lineItems.data.length);
 
     // Build order items array
     const orderItems = productIds.map((productId, index) => ({
@@ -121,7 +143,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
         }
       : undefined;
 
-    // Create order in Sanity with customer reference
+    // Create order in Sanity
+    console.log("Creating order in Sanity...");
     const order = await writeClient.create({
       _type: "order",
       orderNumber,
@@ -136,14 +159,15 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
       items: orderItems,
       total: (session.amount_total ?? 0) / 100,
       status: "paid",
-      stripePaymentId,
+      stripePaymentId: stripeSessionId, // Store session ID instead
       address,
       createdAt: new Date().toISOString(),
     });
 
-    console.log(`Order created: ${order._id} (${orderNumber})`);
+    console.log(`✅ Order created: ${order._id} (${orderNumber})`);
 
-    // Decrease stock for all products in a single transaction
+    // Decrease stock
+    console.log("Updating stock levels...");
     await productIds
       .reduce(
         (tx, productId, i) =>
@@ -152,10 +176,9 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
       )
       .commit();
 
-    console.log(`Stock updated for ${productIds.length} products`);
+    console.log(`✅ Stock updated for ${productIds.length} products`);
   } catch (error) {
-    console.error("Error handling checkout.session.completed:", error);
-    throw error; // Re-throw to return 500 and trigger Stripe retry
+    console.error("Error in handleCheckoutCompleted:", error);
+    throw error;
   }
-  
 }
