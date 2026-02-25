@@ -1,9 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import { Package, ShoppingBag, Sparkles, User } from "lucide-react";
+import { 
+  Package, 
+  ShoppingBag, 
+  Sparkles, 
+  User,
+  ChevronDown,
+  HelpCircle,
+  Truck,
+  RefreshCw,
+  Shield,
+  FileText,
+  Mail
+} from "lucide-react";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuGroup,
+} from "@/components/ui/dropdown-menu";
 import { useCartActions, useTotalItems } from "@/lib/store/cart-store-provider";
 import { useChatActions, useIsChatOpen } from "@/lib/store/chat-store-provider";
 
@@ -23,23 +43,87 @@ export function Header() {
           </span>
         </Link>
 
+        {/* Main Navigation */}
+        <nav className="hidden md:flex md:items-center md:gap-6">
+                  <Link 
+            href="/vivelune" 
+            className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+          >
+            Vivélune
+          </Link>
+          <Link href="/about" className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+            About
+          </Link>
+          
+          {/* Support Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex items-center gap-1 text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+                Support
+                <ChevronDown className="h-4 w-4" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuGroup>
+                <DropdownMenuItem asChild>
+                  <Link href="/contact" className="flex items-center gap-2">
+                    <Mail className="h-4 w-4" />
+                    <span>Contact Us</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/shipping" className="flex items-center gap-2">
+                    <Truck className="h-4 w-4" />
+                    <span>Shipping Info</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/returns" className="flex items-center gap-2">
+                    <RefreshCw className="h-4 w-4" />
+                    <span>Returns & Exchanges</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/care" className="flex items-center gap-2">
+                    <Package className="h-4 w-4" />
+                    <span>Care Instructions</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/warranty" className="flex items-center gap-2">
+                    <Shield className="h-4 w-4" />
+                    <span>Warranty</span>
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                
+                <DropdownMenuItem asChild>
+                  <Link href="/privacy" className="flex items-center gap-2">
+                    <FileText className="h-4 w-4" />
+                    <span>Privacy Policy</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/terms" className="flex items-center gap-2">
+                    <FileText className="h-4 w-4" />
+                    <span>Terms of Service</span>
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </nav>
+
         {/* Actions */}
-        <div className="flex items-center gap-2 mr-10">
-        <div className="hidden md:flex items-center gap-4 text-sm text-zinc-500 dark:text-zinc-400">
-  <Link href="/privacy" className="hover:text-zinc-700 dark:hover:text-zinc-200">
-    Privacy
-  </Link>
-  <span className="text-zinc-300 dark:text-zinc-600">|</span>
-  <Link href="/terms" className="hover:text-zinc-700 dark:hover:text-zinc-200">
-    Terms
-  </Link>
-</div>
+        <div className="flex items-center gap-2">
           {/* My Orders - Only when signed in */}
           <SignedIn>
-            <Button asChild>
+            <Button asChild variant="ghost" size="sm">
               <Link href="/orders" className="flex items-center gap-2">
                 <Package className="h-5 w-5" />
-                <span className="text-sm font-medium">My Orders</span>
+                <span className="hidden sm:inline">Orders</span>
               </Link>
             </Button>
           </SignedIn>
@@ -48,10 +132,11 @@ export function Header() {
           {!isChatOpen && (
             <Button
               onClick={openChat}
+              size="sm"
               className="gap-2 bg-linear-to-r from-amber-500 to-orange-500 text-white shadow-md shadow-amber-200/50 transition-all hover:from-amber-600 hover:to-orange-600 hover:shadow-lg hover:shadow-amber-300/50 dark:shadow-amber-900/30 dark:hover:shadow-amber-800/40"
             >
               <Sparkles className="h-4 w-4" />
-              <span className="text-sm font-medium">Ask AI</span>
+              <span className="hidden sm:inline">Ask AI</span>
             </Button>
           )}
 
@@ -68,7 +153,6 @@ export function Header() {
                 {totalItems > 99 ? "99+" : totalItems}
               </span>
             )}
-            <span className="sr-only">Open cart ({totalItems} items)</span>
           </Button>
 
           {/* User */}
@@ -77,7 +161,7 @@ export function Header() {
               afterSwitchSessionUrl="/"
               appearance={{
                 elements: {
-                  avatarBox: "h-9 w-9",
+                  avatarBox: "h-8 w-8",
                 },
               }}
             >
@@ -94,7 +178,6 @@ export function Header() {
             <SignInButton mode="modal">
               <Button variant="ghost" size="icon">
                 <User className="h-5 w-5" />
-                <span className="sr-only">Sign in</span>
               </Button>
             </SignInButton>
           </SignedOut>

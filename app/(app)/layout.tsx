@@ -7,6 +7,7 @@ import { Header } from "@/components/featuredSections/Header";
 import { CartSheet } from "@/components/featuredSections/CartSheet";
 import { ChatSheet } from "@/components/app/ChatSheet";
 import { AppShell } from "@/components/app/AppShell";
+import { Footer } from "@/components/featuredSections/Footer";
 
 function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -16,9 +17,12 @@ function AppLayout({ children }: { children: React.ReactNode }) {
           <AppShell>
             <Header />
             <main>{children}</main>
+            <Footer/> {/* Add this line */}
+
           </AppShell>
           <CartSheet />
           <ChatSheet />
+
           <Toaster position="bottom-center" />
           <SanityLive />
         </ChatStoreProvider>
