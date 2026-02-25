@@ -1,18 +1,28 @@
-import { createAgentUIStreamResponse, type UIMessage } from "ai";
 import { auth } from "@clerk/nextjs/server";
 import { createShoppingAgent } from "@/lib/ai/shopping-agent";
 
 export async function POST(request: Request) {
-  const { messages }: { messages: UIMessage[] } = await request.json();
-
-  // Get the user's session - userId will be null if not authenticated
+  const { messages } = await request.json();
   const { userId } = await auth();
 
-  // Create agent with user context (orders tool only available if authenticated)
-  const agent = createShoppingAgent({ userId });
+  try {
+    const agent = createShoppingAgent({ userId });
+    const response = await agent.execute(messages);
 
-  return createAgentUIStreamResponse({
-    agent,
-    uiMessages: messages,
-  });
+    return new Response(
+      JSON.stringify({ 
+        role: "assistant", 
+        content: response 
+      }),
+      {
+        headers: { "Content-Type": "application/json" }
+      }
+    );
+  } catch (error) {
+    console.error("Chat error:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to process request" }),
+      { status: 500 }
+    );
+  }
 }
