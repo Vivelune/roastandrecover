@@ -1,217 +1,244 @@
 import { Metadata } from "next";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Shield, Lock, Eye, Database, Mail, Cookie, CheckCircle } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Roast&Recover",
-  description: "Learn how Roast&Recover collects, uses, and protects your personal information.",
+  description: "How we collect, use, and protect your personal information.",
 };
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900">
-      {/* Header */}
-      <div className="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950">
-        <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-          <div className="mb-4">
-            <Link
-              href="/"
-              className="inline-flex items-center text-sm text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Home
-            </Link>
+    <div className="min-h-screen bg-white dark:bg-zinc-950">
+      {/* Hero */}
+      <section className="border-b border-zinc-100 bg-zinc-50/50 dark:border-zinc-800 dark:bg-zinc-900/50">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="mb-6 flex justify-center">
+              <div className="rounded-full bg-amber-100 p-3 dark:bg-amber-900/30">
+                <Shield className="h-8 w-8 text-amber-600 dark:text-amber-400" />
+              </div>
+            </div>
+            <h1 className="font-serif text-4xl font-light tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-5xl">
+              Privacy Policy
+            </h1>
+            <p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400">
+              Your privacy is as important as your ritual practice.
+            </p>
           </div>
-          <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-100">
-            Privacy Policy
-          </h1>
-          <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-            Last updated: February 19, 2026
-          </p>
         </div>
-      </div>
+      </section>
 
-      {/* Content */}
-      <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+      {/* Main Content */}
+      <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="prose prose-zinc dark:prose-invert max-w-none">
-          <div className="space-y-8">
-            {/* Introduction */}
-            <section>
-              <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-                Introduction
-              </h2>
-              <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-                At Roast&Recover, we take your privacy seriously. This Privacy Policy explains how we collect, 
-                use, disclose, and safeguard your information when you visit our website or make a purchase 
-                from our store. Please read this privacy policy carefully. If you do not agree with the terms 
-                of this privacy policy, please do not access the site.
-              </p>
-            </section>
+          <p className="text-sm text-zinc-500 dark:text-zinc-500">
+            Last updated: February 25, 2025
+          </p>
 
-            {/* Information Collection */}
-            <section>
-              <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-                Information We Collect
-              </h2>
-              <div className="mt-4 space-y-4">
+          {/* Introduction */}
+          <section className="mt-8">
+            <p className="text-zinc-600 dark:text-zinc-400">
+              At Roast&Recover, we respect your privacy and are committed to protecting your personal data. 
+              This privacy policy explains how we collect, use, and safeguard your information when you visit our website or make a purchase.
+            </p>
+          </section>
+
+          {/* Data Collection */}
+          <section className="mt-12">
+            <h2 className="font-serif text-2xl font-light text-zinc-900 dark:text-zinc-100">
+              Information We Collect
+            </h2>
+            
+            <div className="mt-6 space-y-6">
+              <div className="flex gap-4">
+                <Database className="h-5 w-5 shrink-0 text-amber-600" />
                 <div>
                   <h3 className="font-medium text-zinc-900 dark:text-zinc-100">
                     Personal Information
                   </h3>
-                  <p className="mt-1 text-zinc-600 dark:text-zinc-400">
-                    We may collect personal information that you voluntarily provide to us when you:
+                  <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                    When you make a purchase or create an account, we collect:
                   </p>
-                  <ul className="mt-2 list-disc pl-5 text-zinc-600 dark:text-zinc-400">
-                    <li>Register for an account</li>
-                    <li>Make a purchase</li>
-                    <li>Sign up for our newsletter</li>
-                    <li>Contact our customer support</li>
-                    <li>Use our AI shopping assistant</li>
+                  <ul className="mt-2 list-inside list-disc text-sm text-zinc-600 dark:text-zinc-400">
+                    <li>Name and contact information (email, phone, address)</li>
+                    <li>Payment information (processed securely by Stripe)</li>
+                    <li>Order history and preferences</li>
+                    <li>Account credentials (if you create an account)</li>
                   </ul>
-                  <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-                    This information may include your name, email address, shipping address, billing address, 
-                    phone number, and payment information.
-                  </p>
                 </div>
+              </div>
 
+              <div className="flex gap-4">
+                <Cookie className="h-5 w-5 shrink-0 text-amber-600" />
                 <div>
                   <h3 className="font-medium text-zinc-900 dark:text-zinc-100">
-                    Automatically Collected Information
+                    Automated Information
                   </h3>
-                  <p className="mt-1 text-zinc-600 dark:text-zinc-400">
-                    When you visit our website, we automatically collect certain information about your device, 
-                    including information about your web browser, IP address, time zone, and some of the cookies 
-                    that are installed on your device.
+                  <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                    When you browse our site, we automatically collect:
                   </p>
+                  <ul className="mt-2 list-inside list-disc text-sm text-zinc-600 dark:text-zinc-400">
+                    <li>IP address and browser type</li>
+                    <li>Pages visited and time spent</li>
+                    <li>Referral source</li>
+                    <li>Device information</li>
+                  </ul>
                 </div>
               </div>
-            </section>
+            </div>
+          </section>
 
-            {/* How We Use Information */}
-            <section>
-              <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-                How We Use Your Information
-              </h2>
-              <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-                We use the information we collect to:
-              </p>
-              <ul className="mt-2 list-disc pl-5 text-zinc-600 dark:text-zinc-400">
-                <li>Process and fulfill your orders</li>
-                <li>Communicate with you about your orders</li>
-                <li>Provide customer support</li>
-                <li>Improve our website and shopping experience</li>
-                <li>Send you marketing communications (with your consent)</li>
-                <li>Detect and prevent fraud</li>
-                <li>Comply with legal obligations</li>
-              </ul>
-            </section>
+          {/* How We Use Data */}
+          <section className="mt-12">
+            <h2 className="font-serif text-2xl font-light text-zinc-900 dark:text-zinc-100">
+              How We Use Your Information
+            </h2>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              {[
+                "Process your orders and payments",
+                "Communicate about your order",
+                "Send marketing emails (with consent)",
+                "Improve our website and products",
+                "Prevent fraud",
+                "Comply with legal obligations"
+              ].map((item) => (
+                <div key={item} className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+                  <CheckCircle className="h-4 w-4 text-amber-600" />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </section>
 
-            {/* Third-Party Services */}
-            <section>
-              <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-                Third-Party Services
-              </h2>
-              <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-                We use the following third-party services to power our store:
-              </p>
-              <div className="mt-4 space-y-4">
-                <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
-                  <h3 className="font-medium text-zinc-900 dark:text-zinc-100">Clerk</h3>
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                    We use Clerk for authentication. When you sign in with Google, Clerk collects your email 
-                    address and profile information. See <a href="https://clerk.com/privacy" target="_blank" rel="noopener noreferrer" className="text-amber-600 hover:underline">Clerk's Privacy Policy</a>.
+          {/* Data Sharing */}
+          <section className="mt-12">
+            <h2 className="font-serif text-2xl font-light text-zinc-900 dark:text-zinc-100">
+              Information Sharing
+            </h2>
+            <p className="mt-4 text-zinc-600 dark:text-zinc-400">
+              We never sell your personal information. We only share data with trusted partners who help us operate:
+            </p>
+            <div className="mt-6 space-y-4">
+              {[
+                {
+                  name: "Stripe",
+                  purpose: "Payment processing",
+                  privacy: "stripe.com/privacy"
+                },
+                {
+                  name: "Sanity.io",
+                  purpose: "Content management",
+                  privacy: "sanity.io/privacy"
+                },
+                {
+                  name: "Clerk",
+                  purpose: "Authentication",
+                  privacy: "clerk.com/privacy"
+                },
+                {
+                  name: "ShipStation",
+                  purpose: "Order fulfillment",
+                  privacy: "shipstation.com/privacy"
+                }
+              ].map((partner) => (
+                <div key={partner.name} className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
+                  <p className="font-medium text-zinc-900 dark:text-zinc-100">{partner.name}</p>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-500">
+                    {partner.purpose} • <a href={`https://${partner.privacy}`} target="_blank" rel="noopener" className="text-amber-600 hover:underline">Privacy Policy</a>
                   </p>
                 </div>
+              ))}
+            </div>
+          </section>
 
-                <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
-                  <h3 className="font-medium text-zinc-900 dark:text-zinc-100">Stripe</h3>
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                    We use Stripe to process payments. Stripe collects your payment information and billing 
-                    address. See <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-amber-600 hover:underline">Stripe's Privacy Policy</a>.
-                  </p>
-                </div>
+          {/* Your Rights */}
+          <section className="mt-12">
+            <h2 className="font-serif text-2xl font-light text-zinc-900 dark:text-zinc-100">
+              Your Privacy Rights
+            </h2>
+            <p className="mt-4 text-zinc-600 dark:text-zinc-400">
+              Depending on your location, you may have the following rights:
+            </p>
+            <ul className="mt-4 list-inside list-disc space-y-2 text-zinc-600 dark:text-zinc-400">
+              <li>Access your personal data</li>
+              <li>Correct inaccurate data</li>
+              <li>Delete your data</li>
+              <li>Opt out of marketing</li>
+              <li>Data portability</li>
+              <li>Withdraw consent</li>
+            </ul>
+            <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400">
+              To exercise these rights, email us at{' '}
+              <a href="mailto:hello@vivelune" className="text-amber-600 hover:underline">
+              hello@vivelune
+              </a>
+            </p>
+          </section>
 
-                <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
-                  <h3 className="font-medium text-zinc-900 dark:text-zinc-100">Sanity.io</h3>
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                    We use Sanity.io as our content management system. It stores product information and order 
-                    data. See <a href="https://www.sanity.io/privacy" target="_blank" rel="noopener noreferrer" className="text-amber-600 hover:underline">Sanity's Privacy Policy</a>.
-                  </p>
-                </div>
+          {/* Cookies */}
+          <section className="mt-12">
+            <h2 className="font-serif text-2xl font-light text-zinc-900 dark:text-zinc-100">
+              Cookies
+            </h2>
+            <p className="mt-4 text-zinc-600 dark:text-zinc-400">
+              We use essential cookies for cart functionality and authentication. 
+              Optional analytics cookies help us improve your experience. You can control cookies in your browser settings.
+            </p>
+          </section>
 
-                <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
-                  <h3 className="font-medium text-zinc-900 dark:text-zinc-100">AI Shopping Assistant</h3>
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                    Our AI shopping assistant uses Anthropic Claude to help you find products. Your conversations 
-                    are processed securely and are not used to train AI models.
-                  </p>
-                </div>
+          {/* Security */}
+          <section className="mt-12">
+            <div className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+              <div className="flex items-center gap-3">
+                <Lock className="h-5 w-5 text-amber-600" />
+                <h3 className="font-medium text-zinc-900 dark:text-zinc-100">
+                  Security Measures
+                </h3>
               </div>
-            </section>
-
-            {/* Data Security */}
-            <section>
-              <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-                Data Security
-              </h2>
-              <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-                We implement a variety of security measures to maintain the safety of your personal information. 
-                All sensitive information is encrypted via SSL technology. Payment information is processed 
-                directly by Stripe and never stored on our servers.
+              <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400">
+                We implement industry-standard security measures including:
               </p>
-            </section>
-
-            {/* Your Rights */}
-            <section>
-              <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-                Your Rights
-              </h2>
-              <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-                Depending on your location, you may have the following rights regarding your personal information:
-              </p>
-              <ul className="mt-2 list-disc pl-5 text-zinc-600 dark:text-zinc-400">
-                <li>Access to your personal information</li>
-                <li>Correction of inaccurate information</li>
-                <li>Deletion of your information</li>
-                <li>Objection to processing</li>
-                <li>Data portability</li>
+              <ul className="mt-4 list-inside list-disc space-y-1 text-sm text-zinc-600 dark:text-zinc-400">
+                <li>256-bit SSL encryption</li>
+                <li>PCI-DSS compliant payment processing</li>
+                <li>Regular security audits</li>
+                <li>Limited employee access to data</li>
               </ul>
-              <p className="mt-4 text-zinc-600 dark:text-zinc-400">
-                To exercise these rights, please contact us at privacy@roastandrecover.com.
-              </p>
-            </section>
+            </div>
+          </section>
 
-            {/* Contact Information */}
-            <section className="rounded-lg bg-amber-50 p-6 dark:bg-amber-950/30">
-              <h2 className="text-xl font-semibold text-amber-900 dark:text-amber-100">
-                Contact Us
-              </h2>
-              <p className="mt-2 text-amber-800 dark:text-amber-200">
-                If you have questions about this Privacy Policy, please contact us:
+          {/* Contact */}
+          <section className="mt-12">
+            <h2 className="font-serif text-2xl font-light text-zinc-900 dark:text-zinc-100">
+              Contact Us
+            </h2>
+            <p className="mt-4 text-zinc-600 dark:text-zinc-400">
+              For privacy-related questions:
+            </p>
+            <div className="mt-4 rounded-lg bg-amber-50 p-6 dark:bg-amber-950/30">
+              <p className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
+                <Mail className="h-4 w-4" />
+                <a href="hello@vivelune.com" className="hover:underline">
+                  hello@vivelune.com
+                </a>
               </p>
-              <ul className="mt-4 space-y-2 text-amber-800 dark:text-amber-200">
-                <li>Email: ritual@roastandrecover.com</li>
-                <li>Address: Roast and Recover , 30 Gould Ste St R, Sheridan, WY, U.S</li>
-            
-              </ul>
-            </section>
-          </div>
-        </div>
+              <p className="mt-2 text-sm text-amber-700 dark:text-amber-300">
+                Roast&Recover
+                <br />
+                30 N Gould St
+                <br />
+                Sheridan, WY 82801
+              </p>
+            </div>
+          </section>
 
-        {/* Footer Actions */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-zinc-200 pt-8 dark:border-zinc-800 sm:flex-row">
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            © {new Date().getFullYear()} Roast&Recover. All rights reserved.
-          </p>
-          <div className="flex gap-4">
-            <Link
-              href="/terms"
-              className="text-sm text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
-            >
-              Terms of Service
-            </Link>
-          </div>
+          {/* Legal Notice */}
+          <section className="mt-12 border-t border-zinc-200 pt-8 text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-500">
+            <p>
+              This privacy policy is for informational purposes and does not constitute legal advice. 
+              We comply with applicable data protection laws including GDPR, CCPA, and others where required.
+            </p>
+          </section>
         </div>
       </div>
     </div>
